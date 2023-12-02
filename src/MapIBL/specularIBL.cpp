@@ -8,17 +8,16 @@ std::vector<std::string> faces
     "px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"
 };
 
-
 int main( int argc, char **argv )
 {
     const size_t      input_w    = std::atol(argv[1]);
     const size_t      output_w   = std::atol(argv[2]); // 128
     const std::string output_dir = std::string(argv[3]);
 
-
     idk::RenderEngine ren;
-    ren.init("Specular IBL", 64, 64, idk::RenderEngine::INIT_FRAMEBUFFERS);
-    ren.createProgram("specularIBL", "./", "specularIBL.vs", "specularIBL.fs");
+    uint32_t flags = idk::RenderEngine::INIT_FRAMEBUFFERS | idk::RenderEngine::INIT_HEADLESS;
+    ren.init("Diffuse IBL", 64, 64, flags);
+    ren.createProgram("specularIBL", "./shaders/", "specularIBL.vs", "specularIBL.fs");
 
 
     // Load input cubemap

@@ -2,23 +2,23 @@
 
 void renderCube();
 
+std::vector<std::string> faces
+{
+    "px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"
+};
+
 int main( int argc, char **argv )
 {
     const size_t      output_w   = std::atol(argv[1]); // 32
     const std::string output_dir = std::string(argv[2]);
 
-
     idk::RenderEngine ren;
-    ren.init("Diffuse IBL", 64, 64, idk::RenderEngine::INIT_FRAMEBUFFERS);
-    ren.createProgram("diffuseIBL", "./", "diffuseIBL.vs", "diffuseIBL.fs");
+    uint32_t flags = idk::RenderEngine::INIT_FRAMEBUFFERS | idk::RenderEngine::INIT_HEADLESS;
+    ren.init("Diffuse IBL", 64, 64, flags);
+    ren.createProgram("diffuseIBL", "./shaders/", "diffuseIBL.vs", "diffuseIBL.fs");
 
     // Load input cubemap
     // -----------------------------------------------------------------------------------------
-    std::vector<std::string> faces
-    {
-        "px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"
-    };
-
     idk::glColorConfig cubeconfig = {
         .internalformat = GL_RGBA16F,
         .format         = GL_RGBA,

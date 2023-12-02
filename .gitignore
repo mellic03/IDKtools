@@ -1,0 +1,8 @@
+build
+output
+
+external/include/*
+!external/include/assimp_here.txt
+
+external/lib/*
+!external/lib/libs_go_here.txt
