@@ -1,31 +1,33 @@
 cmake_minimum_required(VERSION 3.9)
 
-set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
-set(CMAKE_DISABLE_SOURCE_CHANGES  ON)
-
-set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
-set(CMAKE_BUILD_PARALLEL_LEVEL 8)
-set(CMAKE_CXX_FLAGS "-std=c++17 -Wuninitialized -Winit-self -Wmaybe-uninitialized -Werror -fsanitize=undefined -fdiagnostics-color=always -lstdc++fs")
-add_compile_options("-g" "-s" "-fno-ident" "-fno-asynchronous-unwind-tables" "-I/usr/include/opencv4/")
-
-add_definitions(-DCMAKE_EXPORT_COMPILE_COMMANDS=ON)
-
-
 # Debugging
 # --------------------------------------------
 add_definitions(-DIDK_DEBUG)
 # --------------------------------------------
 
-# IDKEngine source directory
-# --------------------------------------------
-set(idkengine_source_dir "IDKGameEngine/src/")
-add_subdirectory(IDKGameEngine/src/)
-# --------------------------------------------
+include_directories(${CMAKE_SOURCE_DIR}/external/include)
 
 
 # MapIBL
 # ----------------------------------------------------------------------------------------------
 project (diffuseIBL)
+
+
+set(OpenGL_GL_PREFERENCE GLVND)
+
+find_package(GLEW REQUIRED)
+find_package(OpenGL REQUIRED)
+find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+find_package(SDL2_mixer REQUIRED)
+
+include_directories(${GLEW_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(${SDL2_image_INCLUDE_DIRS})
+include_directories(${SDL2_mixer_INCLUDE_DIRS})
+
+
 
 add_executable(
     ${PROJECT_NAME} "src/MapIBL/diffuseIBL.cpp"
@@ -50,7 +52,6 @@ target_link_libraries(
 # ----------------------------------------------------------------------------------------------
 
 
-
 # ModelConvert
 # ----------------------------------------------------------------------------------------------
 project (modelconvert)
@@ -63,5 +64,20 @@ target_link_libraries(
     ${PROJECT_NAME}
     IDKengine
     ${CMAKE_SOURCE_DIR}/external/lib/libassimp.so
+)
+# ----------------------------------------------------------------------------------------------
+
+
+# TextureConvert
+# ----------------------------------------------------------------------------------------------
+project (textureconvert)
+
+add_executable(
+    ${PROJECT_NAME} "src/TextureConvert/textureconvert.cpp"
+)
+
+target_link_libraries(
+    ${PROJECT_NAME}
+    IDKengine
 )
 # ----------------------------------------------------------------------------------------------

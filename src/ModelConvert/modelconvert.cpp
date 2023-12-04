@@ -1,4 +1,4 @@
-#include "IDKengine.h"
+#include "IDKengine/IDKengine.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -8,7 +8,7 @@
 
 void thang( const aiScene *scene, aiNode *node )
 {
-    // std::cout << "meshes: " << node->mNumMeshes << "\n";
+    std::cout << "meshes: " << node->mNumMeshes << "\n";
 
     for (int i=0; i<node->mNumMeshes; i++)
     {

@@ -1,4 +1,4 @@
-#include "IDKengine.h"
+#include "IDKengine/IDKengine.hpp"
 
 void renderCube();
 
@@ -13,8 +13,7 @@ int main( int argc, char **argv )
     const std::string output_dir = std::string(argv[2]);
 
     idk::RenderEngine ren;
-    uint32_t flags = idk::RenderEngine::INIT_FRAMEBUFFERS | idk::RenderEngine::INIT_HEADLESS;
-    ren.init("Diffuse IBL", 64, 64, flags);
+    ren.init("Diffuse IBL", 64, 64, idk::RenderEngine::INIT_HEADLESS);
     ren.createProgram("diffuseIBL", "./shaders/", "diffuseIBL.vs", "diffuseIBL.fs");
 
     // Load input cubemap

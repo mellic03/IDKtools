@@ -1,4 +1,4 @@
-#include "IDKengine.h"
+#include "IDKengine/IDKengine.hpp"
 
 void renderCube();
 void saveCubemap( std::string filepath, size_t w, GLint level, GLuint cubemap );
@@ -15,8 +15,7 @@ int main( int argc, char **argv )
     const std::string output_dir = std::string(argv[3]);
 
     idk::RenderEngine ren;
-    uint32_t flags = idk::RenderEngine::INIT_FRAMEBUFFERS | idk::RenderEngine::INIT_HEADLESS;
-    ren.init("Diffuse IBL", 64, 64, flags);
+    ren.init("Specular IBL", 64, 64, idk::RenderEngine::INIT_HEADLESS);
     ren.createProgram("specularIBL", "./shaders/", "specularIBL.vs", "specularIBL.fs");
 
 
