@@ -1,4 +1,4 @@
-#include "IDKengine/IDKengine.h"
+#include "IDKengine/IDKengine.hpp"
 
 
 int main( int argc, char **argv )
@@ -6,8 +6,7 @@ int main( int argc, char **argv )
     std::string input_path = argv[1];
 
     idk::RenderEngine ren;
-    uint32_t flags = idk::RenderEngine::INIT_FRAMEBUFFERS | idk::RenderEngine::INIT_HEADLESS;
-    ren.init("TextureConvert", 64, 64, flags);
+    ren.init("TextureConvert", 64, 64, idk::RenderEngine::INIT_HEADLESS);
 
 
     SDL_Surface     *tmp    = IMG_Load(input_path.c_str());

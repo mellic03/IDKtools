@@ -12,7 +12,6 @@ include_directories(${CMAKE_SOURCE_DIR}/external/include)
 # ----------------------------------------------------------------------------------------------
 project (diffuseIBL)
 
-
 set(OpenGL_GL_PREFERENCE GLVND)
 
 find_package(GLEW REQUIRED)
@@ -27,6 +26,13 @@ include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_image_INCLUDE_DIRS})
 include_directories(${SDL2_mixer_INCLUDE_DIRS})
 
+set(GRAPHICS_LIBRARIES
+    GLEW
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    ${OPENGL_LIBRARIES}
+)
 
 
 add_executable(
@@ -35,7 +41,8 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME} PUBLIC
-    IDKengine
+    ${GRAPHICS_LIBRARIES}
+    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
 )
 
 
@@ -47,7 +54,8 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME} PUBLIC
-    IDKengine
+    ${GRAPHICS_LIBRARIES}
+    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
 )
 # ----------------------------------------------------------------------------------------------
 
@@ -62,7 +70,8 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    IDKengine
+    ${GRAPHICS_LIBRARIES}
+    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
     ${CMAKE_SOURCE_DIR}/external/lib/libassimp.so
 )
 # ----------------------------------------------------------------------------------------------
@@ -78,6 +87,7 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    IDKengine
+    ${GRAPHICS_LIBRARIES}
+    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
 )
 # ----------------------------------------------------------------------------------------------

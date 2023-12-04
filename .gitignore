@@ -1,6 +1,9 @@
 build
 output
 
+external/IDKGE
+
+
 external/include/*
 !external/include/assimp_here.txt
 

@@ -1,4 +1,4 @@
-#include "IDKengine/IDKengine.h"
+#include "IDKengine/IDKengine.hpp"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
