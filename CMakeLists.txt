@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 
-# Debugging
-# --------------------------------------------
+add_compile_options("-g" "-fno-ident" "-fno-asynchronous-unwind-tables")
 add_definitions(-DIDK_DEBUG)
-# --------------------------------------------
 
 include_directories(${CMAKE_SOURCE_DIR}/external/include)
 
@@ -65,8 +63,10 @@ target_link_libraries(
 project (modelconvert)
 
 add_executable(
-    ${PROJECT_NAME} "src/ModelConvert/modelconvert.cpp"
+    ${PROJECT_NAME} "src/ModelConvert/modelconvert.cpp;src/ModelConvert/animation.cpp"
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath=../IDKGE/shipping/")
 
 target_link_libraries(
     ${PROJECT_NAME}

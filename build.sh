@@ -1,30 +1,25 @@
 #!/bin/bash
 
-# Delete old files
-rm -R ./output/assets
-
 # Build project
-mkdir ./build
+mkdir -p ./build
 cd ./build
 cmake -G Ninja ..
 ninja -j 6
 cd ..
 
 
-mkdir ./output
+mkdir -p ./output/IDKGE
+
+cp -R external/IDKGE/shipping output/IDKGE/.
+cp external/lib/* output/IDKGE/shipping/.
 
 
 # MapIBL
 # ----------------------------------------------------------------------------------------------
-mkdir ./output/MapIBL
-mkdir ./output/MapIBL/shaders
-mkdir ./output/MapIBL/input
-mkdir ./output/MapIBL/output
+mkdir -p ./output/MapIBL/{shaders,input,output}
+cp src/MapIBL/mapIBL.sh output/MapIBL/.
 
-cp -R ./src/shaders/. ./output/MapIBL/shaders/.
-
-cp ./src/mapIBL.sh ./output/MapIBL/.
-
+cp -R src/MapIBL/shaders output/MapIBL/.
 cp ./build/diffuseIBL ./output/MapIBL/diffuseIBL
 cp ./build/specularIBL ./output/MapIBL/specularIBL
 # ----------------------------------------------------------------------------------------------
@@ -32,8 +27,8 @@ cp ./build/specularIBL ./output/MapIBL/specularIBL
 
 # ModelConvert
 # ----------------------------------------------------------------------------------------------
-mkdir ./output/ModelConvert
-cp -R ./external/lib/. ./output/ModelConvert/.
+mkdir -p ./output/ModelConvert
+# cp -R ./external/lib/. ./output/ModelConvert/.
 cp ./build/modelconvert ./output/ModelConvert/modelconvert
 # ----------------------------------------------------------------------------------------------
 
