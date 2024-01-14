@@ -1,4 +1,4 @@
-#include "IDKengine/IDKengine.hpp"
+#include "IDKGameEngine/IDKGameEngine.hpp"
 
 
 int main( int argc, char **argv )

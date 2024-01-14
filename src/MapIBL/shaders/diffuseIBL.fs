@@ -7,13 +7,6 @@ uniform samplerCube un_env_map;
 #define PI 3.14159265359
 
 
-vec3 correct( vec3 color )
-{
-    color = color / (color + vec3(1.0));
-    color = pow(color, vec3(1.0/2.2)); 
-    return color;
-}
-
 void main()
 {
     vec3 N = normalize(fsin_fragpos);

@@ -1,4 +1,4 @@
-#include "IDKengine/IDKengine.hpp"
+#include "IDKGameEngine/IDKGameEngine.hpp"
 
 void renderCube();
 
@@ -18,8 +18,8 @@ int main( int argc, char **argv )
 
     // Load input cubemap
     // -----------------------------------------------------------------------------------------
-    idk::glColorConfig cubeconfig = {
-        .internalformat = GL_RGBA16F,
+    idk::glTextureConfig cubeconfig = {
+        .internalformat = GL_RGBA16,
         .format         = GL_RGBA,
         .minfilter      = GL_LINEAR,
         .magfilter      = GL_LINEAR,
@@ -48,8 +48,8 @@ int main( int argc, char **argv )
     idk::glShader &program = ren.getProgram("diffuseIBL");
 
     idk::glFramebuffer framebuffer;
-    idk::glColorConfig config = {
-        .internalformat = GL_RGBA16F,
+    idk::glTextureConfig config = {
+        .internalformat = GL_SRGB8_ALPHA8,
         .minfilter      = GL_LINEAR,
         .magfilter      = GL_LINEAR
     };
@@ -98,7 +98,7 @@ int main( int argc, char **argv )
 
     for (int i=0; i<6; i++)
     {
-        GLCALL(glGetTexImage(
+        IDK_GLCALL(glGetTexImage(
             GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
             0,
             GL_RGBA,

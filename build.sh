@@ -30,5 +30,6 @@ cp ./build/specularIBL ./output/MapIBL/specularIBL
 mkdir -p ./output/ModelConvert
 # cp -R ./external/lib/. ./output/ModelConvert/.
 cp ./build/modelconvert ./output/ModelConvert/modelconvert
+cp ./build/modelconvert ./output/ModelConvert/mc
 # ----------------------------------------------------------------------------------------------
 

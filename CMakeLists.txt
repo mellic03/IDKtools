@@ -1,14 +1,11 @@
 cmake_minimum_required(VERSION 3.9)
 
-add_compile_options("-g" "-fno-ident" "-fno-asynchronous-unwind-tables")
-add_definitions(-DIDK_DEBUG)
-
 include_directories(${CMAKE_SOURCE_DIR}/external/include)
 
 
 # MapIBL
 # ----------------------------------------------------------------------------------------------
-project (diffuseIBL)
+# project (diffuseIBL)
 
 set(OpenGL_GL_PREFERENCE GLVND)
 
@@ -33,28 +30,28 @@ set(GRAPHICS_LIBRARIES
 )
 
 
-add_executable(
-    ${PROJECT_NAME} "src/MapIBL/diffuseIBL.cpp"
-)
+# add_executable(
+#     ${PROJECT_NAME} "src/MapIBL/diffuseIBL.cpp"
+# )
 
-target_link_libraries(
-    ${PROJECT_NAME} PUBLIC
-    ${GRAPHICS_LIBRARIES}
-    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
-)
+# target_link_libraries(
+#     ${PROJECT_NAME} PUBLIC
+#     ${GRAPHICS_LIBRARIES}
+#     IDKGameEngine
+# )
 
 
-project (specularIBL)
+# project (specularIBL)
 
-add_executable(
-    ${PROJECT_NAME} "src/MapIBL/specularIBL.cpp"
-)
+# add_executable(
+#     ${PROJECT_NAME} "src/MapIBL/specularIBL.cpp"
+# )
 
-target_link_libraries(
-    ${PROJECT_NAME} PUBLIC
-    ${GRAPHICS_LIBRARIES}
-    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
-)
+# target_link_libraries(
+#     ${PROJECT_NAME} PUBLIC
+#     ${GRAPHICS_LIBRARIES}
+#     IDKGameEngine
+# )
 # ----------------------------------------------------------------------------------------------
 
 
@@ -63,31 +60,37 @@ target_link_libraries(
 project (modelconvert)
 
 add_executable(
-    ${PROJECT_NAME} "src/ModelConvert/modelconvert.cpp;src/ModelConvert/animation.cpp"
+    ${PROJECT_NAME} "src/ModelConvert/modelconvert.cpp"
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES LINK_FLAGS "-Wl,-rpath=../IDKGE/shipping/")
+set_target_properties(
+    ${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/IDKTools/
+)
 
 target_link_libraries(
     ${PROJECT_NAME}
     ${GRAPHICS_LIBRARIES}
-    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
-    ${CMAKE_SOURCE_DIR}/external/lib/libassimp.so
+
+    IDKGraphics
+    IDKGameEngine
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libassimp.so
 )
 # ----------------------------------------------------------------------------------------------
 
 
 # TextureConvert
 # ----------------------------------------------------------------------------------------------
-project (textureconvert)
+# project (textureconvert)
 
-add_executable(
-    ${PROJECT_NAME} "src/TextureConvert/textureconvert.cpp"
-)
+# add_executable(
+#     ${PROJECT_NAME} "src/TextureConvert/textureconvert.cpp"
+# )
 
-target_link_libraries(
-    ${PROJECT_NAME}
-    ${GRAPHICS_LIBRARIES}
-    ${CMAKE_SOURCE_DIR}/external/lib/libIDKengine.so
-)
+# target_link_libraries(
+#     ${PROJECT_NAME}
+#     ${GRAPHICS_LIBRARIES}
+#     IDKGameEngine
+# )
 # ----------------------------------------------------------------------------------------------
