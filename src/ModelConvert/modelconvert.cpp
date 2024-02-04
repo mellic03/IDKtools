@@ -20,19 +20,19 @@ int main( int argc, char **argv )
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(input_path, flags);
 
-    if (scene->HasAnimations())
-    {
-        Loader<idk::AnimatedVertex> loader;
-        loader.process(scene);
-        loader.write(input_path);
-    }
+    // if (scene->HasAnimations())
+    // {
+    //     Loader<idk::AnimatedVertex> loader;
+    //     loader.process(scene);
+    //     loader.write(input_path);
+    // }
 
-    else
-    {
+    // else
+    // {
         Loader<idk::Vertex> loader;
         loader.process(scene);
         loader.write(input_path);
-    }
+    // }
 
 
     return 0;

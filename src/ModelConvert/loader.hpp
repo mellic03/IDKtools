@@ -18,7 +18,8 @@
 #define IDK_NORMAL_TEXTURE 1
 #define IDK_RM_TEXTURE 2
 #define IDK_AO_TEXTURE 3
-#define IDK_NUM_TEXTURES 4
+#define IDK_EM_TEXTURE 4
+#define IDK_NUM_TEXTURES 5
 
 
 glm::mat4 assimp_matrix_compose( aiVector3D position, aiQuaternion rotation, aiVector3D scale )
@@ -59,7 +60,7 @@ std::string file_directory( std::string filepath )
 
 struct idk_Material
 {
-    std::string paths[4] = { "dummy", "dummy", "dummy", "dummy" };
+    std::string paths[5] = { "dummy", "dummy", "dummy", "dummy", "dummy" };
 };
 
 
@@ -102,12 +103,13 @@ public:
     {
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-        aiString paths[4];
+        aiString paths[IDK_NUM_TEXTURES];
     
         material->GetTexture(aiTextureType_BASE_COLOR, 0, &paths[0]);
         material->GetTexture(aiTextureType_NORMALS,    0, &paths[1]);
         material->GetTexture(aiTextureType_METALNESS,  0, &paths[2]);
         material->GetTexture(aiTextureType_LIGHTMAP,   0, &paths[3]);
+        material->GetTexture(aiTextureType_EMISSIVE,   0, &paths[4]);
 
         for (int i=0; i<IDK_NUM_TEXTURES; i++)
         {
@@ -273,7 +275,7 @@ public:
     {
         std::vector<vertex_t> all_vertices;
         std::vector<uint32_t> all_indices;
-        idk::Buffer<idk::idkvi_mesh> meshes;
+        // idk::Buffer<idk::idkvi_mesh> meshes;
 
         uint32_t basevertex = 0;
         uint32_t baseindex  = 0;
@@ -301,18 +303,20 @@ public:
         }
 
 
-        uint32_t vertexformat = idk::VertexFormat::VERTEX_POSITION3F_NORMAL3F_TANGENT3F_UV2F;
+        // uint32_t vertexformat = idk::VertexFormat::VERTEX_POSITION3F_NORMAL3F_TANGENT3F_UV2F;
         uint32_t num_vertices = all_vertices.size();
         uint32_t num_indices  = all_indices.size();
-        uint32_t num_meshes   = meshes.size();
+        // uint32_t num_meshes   = meshes.size();
 
-        stream.write(reinterpret_cast<const char *>(&vertexformat), sizeof(uint32_t));
+        // stream.write(reinterpret_cast<const char *>(&vertexformat), sizeof(uint32_t));
         stream.write(reinterpret_cast<const char *>(&num_vertices), sizeof(uint32_t));
         stream.write(reinterpret_cast<const char *>(&num_indices),  sizeof(uint32_t));
-        stream.write(reinterpret_cast<const char *>(&num_meshes),   sizeof(uint32_t));
+        // stream.write(reinterpret_cast<const char *>(&num_meshes),   sizeof(uint32_t));
 
         stream.write(reinterpret_cast<const char *>(&all_vertices[0]), num_vertices*sizeof(vertex_t));
         stream.write(reinterpret_cast<const char *>(&all_indices[0]),  num_indices*sizeof(uint32_t));
+
+        std::cout << all_vertices.size() << ", " << all_indices.size() << "\n";
         // stream.write(reinterpret_cast<const char *>(meshes.data()),    meshes.nbytes());
     }
 
@@ -327,9 +331,9 @@ public:
     {
         std::ofstream stream;
     
-        // stream = std::ofstream(file_directory(filepath) + ".txt");
-        // write_header(stream);
-        // stream.close();
+        stream = std::ofstream(file_directory(filepath) + ".txt");
+        write_header(stream);
+        stream.close();
 
         stream = std::ofstream(file_directory(filepath) + ".idkvi", std::ios::binary);
         write_idkvi(stream);
