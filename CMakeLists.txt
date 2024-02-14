@@ -65,7 +65,7 @@ add_executable(
 
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/IDKTools/
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/IDKTools/ModelConvert/
 )
 
 target_link_libraries(
@@ -94,3 +94,35 @@ target_link_libraries(
 #     IDKGameEngine
 # )
 # ----------------------------------------------------------------------------------------------
+
+
+
+# BRDF LUT
+# ----------------------------------------------------------------------------------------------
+project (brdf-lut)
+
+add_executable(
+    ${PROJECT_NAME} "src/BRDF_LUT/main.cpp"
+)
+
+set_target_properties(
+    ${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/IDKTools/BRDF_LUT/
+)
+
+
+FILE(
+    COPY ${CMAKE_CURRENT_SOURCE_DIR}/src/BRDF_LUT/brdf-lut.comp
+    DESTINATION ${CMAKE_SOURCE_DIR}/build/IDKTools/BRDF_LUT/
+)
+
+
+target_link_libraries(
+    ${PROJECT_NAME}
+    ${GRAPHICS_LIBRARIES}
+    libidk
+    IDKGraphics
+    IDKGameEngine
+)
+# ----------------------------------------------------------------------------------------------
+
