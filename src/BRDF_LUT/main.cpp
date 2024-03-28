@@ -5,7 +5,7 @@
 #include <fstream>
 
 
-#define LUT_TEXTURE_SIZE 128
+#define LUT_TEXTURE_SIZE 512
 
 
 int main()
@@ -24,7 +24,7 @@ int main()
     header.nbytes = idk::RawImage_nbytes(header);
 
     idk::glTextureConfig config = {
-        .internalformat = GL_RG32F,
+        .internalformat = GL_RG16F,
         .format         = GL_RG,
         .minfilter      = GL_LINEAR,
         .magfilter      = GL_LINEAR,
@@ -35,12 +35,12 @@ int main()
     };
 
 
-    GLuint texture = idk::gltools::genTexture2D(header.w, header.h, config);
-    idk::gl::bindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RG32F);
+    GLuint texture = idk::gltools::loadTexture2D(header.w, header.h, nullptr, config);
+    idk::gl::bindImageTexture(0, texture, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RG16F);
 
     idk::glShaderProgram program("brdf-lut.comp");
     program.bind();
-    program.dispatch(LUT_TEXTURE_SIZE / 8);
+    program.dispatch(LUT_TEXTURE_SIZE/8, LUT_TEXTURE_SIZE/8, 1);
     idk::gl::memoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
     program.unbind();
 

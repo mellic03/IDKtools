@@ -7,6 +7,9 @@
 #include <IDKGameEngine/IDKGameEngine.hpp>
 #include <libidk/idk_idkvi_file.hpp>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -60,7 +63,10 @@ std::string file_directory( std::string filepath )
 
 struct idk_Material
 {
-    std::string paths[5] = { "dummy", "dummy", "dummy", "dummy", "dummy" };
+    std::string paths[8] = {
+        "", "", "", "",
+        "", "", "", ""
+    };
 };
 
 
@@ -158,38 +164,38 @@ public:
     }
 
 
-    void load_weights( aiMesh *mesh, idk_Mesh &idkmesh, idk::Vertex v )
-    {
+    // void load_weights( aiMesh *mesh, idk_Mesh &idkmesh, idk::Vertex v )
+    // {
 
-    }
+    // }
 
-    void load_weights( aiMesh *mesh, idk_Mesh &idkmesh, idk::AnimatedVertex v )
-    {
-        std::vector<vertex_t> &vertices = idkmesh.m_vertices;
+    // void load_weights( aiMesh *mesh, idk_Mesh &idkmesh, idk::AnimatedVertex v )
+    // {
+    //     std::vector<vertex_t> &vertices = idkmesh.m_vertices;
 
-        std::map<int, int> weightmap;
+    //     std::map<int, int> weightmap;
 
-        for (int i=0; i<mesh->mNumBones; i++)
-        {
-            aiBone *aibone     = mesh->mBones[i];
-            aiNode *bone_node  = aibone->mNode;
+    //     for (int i=0; i<mesh->mNumBones; i++)
+    //     {
+    //         aiBone *aibone     = mesh->mBones[i];
+    //         aiNode *bone_node  = aibone->mNode;
 
-            int aibone_idx = m_skeleton.m_aiBoneNodeIndices[bone_node->mName.C_Str()];
+    //         int aibone_idx = m_skeleton.m_aiBoneNodeIndices[bone_node->mName.C_Str()];
 
-            for (int j=0; j<aibone->mNumWeights; j++)
-            {
-                aiVertexWeight vWeight = aibone->mWeights[j];
+    //         for (int j=0; j<aibone->mNumWeights; j++)
+    //         {
+    //             aiVertexWeight vWeight = aibone->mWeights[j];
 
-                int   idx    = vWeight.mVertexId;
-                float weight = vWeight.mWeight;
+    //             int   idx    = vWeight.mVertexId;
+    //             float weight = vWeight.mWeight;
 
-                int &n = weightmap[idx];
-                vertices[idx].bone_ids[n]     = aibone_idx;
-                vertices[idx].bone_weights[n] = weight;
-                n += 1;
-            }
-        }
-    }
+    //             int &n = weightmap[idx];
+    //             vertices[idx].bone_ids[n]     = aibone_idx;
+    //             vertices[idx].bone_weights[n] = weight;
+    //             n += 1;
+    //         }
+    //     }
+    // }
 
 
     void load_mesh( const aiScene *scene, aiNode *node, aiMesh *mesh )
@@ -199,7 +205,7 @@ public:
 
         load_material(scene, mesh, idkmesh.m_material);
         load_vertices(scene, node, mesh, idkmesh);
-        load_weights(mesh, idkmesh, vertex_t());
+        // load_weights(mesh, idkmesh, vertex_t());
     }
 
 
@@ -221,6 +227,7 @@ public:
     void process( const aiScene *scene )
     {
         aiNode *root = scene->mRootNode;
+    
 
         // Load skeleton
         // -------------------------------------------------------------------------------------
@@ -271,54 +278,54 @@ public:
     }
 
 
-    void write_idkvi( std::ofstream &stream )
-    {
-        std::vector<vertex_t> all_vertices;
-        std::vector<uint32_t> all_indices;
-        // idk::Buffer<idk::idkvi_mesh> meshes;
+    // void write_idkvi( std::ofstream &stream )
+    // {
+    //     std::vector<vertex_t> all_vertices;
+    //     std::vector<uint32_t> all_indices;
+    //     // idk::Buffer<idk::idkvi_mesh> meshes;
 
-        uint32_t basevertex = 0;
-        uint32_t baseindex  = 0;
-        uint32_t vertex_offset = 0;
+    //     uint32_t basevertex = 0;
+    //     uint32_t baseindex  = 0;
+    //     uint32_t vertex_offset = 0;
 
-        for (idk_Mesh &mesh: m_meshes)
-        {
-            for (auto &v: mesh.m_vertices)
-            {
-                all_vertices.push_back(v);
-            }
+    //     for (idk_Mesh &mesh: m_meshes)
+    //     {
+    //         for (auto &v: mesh.m_vertices)
+    //         {
+    //             all_vertices.push_back(v);
+    //         }
 
-            for (uint32_t idx: mesh.m_indices)
-            {
-                all_indices.push_back(idx + basevertex);
-            }
+    //         for (uint32_t idx: mesh.m_indices)
+    //         {
+    //             all_indices.push_back(idx + basevertex);
+    //         }
 
-            basevertex += mesh.m_vertices.size();
+    //         basevertex += mesh.m_vertices.size();
 
-            // idk::idkvi_mesh meshfile;
-            // meshfile.basevertex = basevertex;
-            // meshfile.baseindex  = 0;
-            // meshfile.material   = gen_idkvi_material(mesh.m_material);
-            // meshes.push_back(meshfile);
-        }
+    //         // idk::idkvi_mesh meshfile;
+    //         // meshfile.basevertex = basevertex;
+    //         // meshfile.baseindex  = 0;
+    //         // meshfile.material   = gen_idkvi_material(mesh.m_material);
+    //         // meshes.push_back(meshfile);
+    //     }
 
 
-        // uint32_t vertexformat = idk::VertexFormat::VERTEX_POSITION3F_NORMAL3F_TANGENT3F_UV2F;
-        uint32_t num_vertices = all_vertices.size();
-        uint32_t num_indices  = all_indices.size();
-        // uint32_t num_meshes   = meshes.size();
+    //     // uint32_t vertexformat = idk::VertexFormat::VERTEX_POSITION3F_NORMAL3F_TANGENT3F_UV2F;
+    //     uint32_t num_vertices = all_vertices.size();
+    //     uint32_t num_indices  = all_indices.size();
+    //     // uint32_t num_meshes   = meshes.size();
 
-        // stream.write(reinterpret_cast<const char *>(&vertexformat), sizeof(uint32_t));
-        stream.write(reinterpret_cast<const char *>(&num_vertices), sizeof(uint32_t));
-        stream.write(reinterpret_cast<const char *>(&num_indices),  sizeof(uint32_t));
-        // stream.write(reinterpret_cast<const char *>(&num_meshes),   sizeof(uint32_t));
+    //     // stream.write(reinterpret_cast<const char *>(&vertexformat), sizeof(uint32_t));
+    //     stream.write(reinterpret_cast<const char *>(&num_vertices), sizeof(uint32_t));
+    //     stream.write(reinterpret_cast<const char *>(&num_indices),  sizeof(uint32_t));
+    //     // stream.write(reinterpret_cast<const char *>(&num_meshes),   sizeof(uint32_t));
 
-        stream.write(reinterpret_cast<const char *>(&all_vertices[0]), num_vertices*sizeof(vertex_t));
-        stream.write(reinterpret_cast<const char *>(&all_indices[0]),  num_indices*sizeof(uint32_t));
+    //     stream.write(reinterpret_cast<const char *>(&all_vertices[0]), num_vertices*sizeof(vertex_t));
+    //     stream.write(reinterpret_cast<const char *>(&all_indices[0]),  num_indices*sizeof(uint32_t));
 
-        std::cout << all_vertices.size() << ", " << all_indices.size() << "\n";
-        // stream.write(reinterpret_cast<const char *>(meshes.data()),    meshes.nbytes());
-    }
+    //     std::cout << all_vertices.size() << ", " << all_indices.size() << "\n";
+    //     // stream.write(reinterpret_cast<const char *>(meshes.data()),    meshes.nbytes());
+    // }
 
 
     void write_idka( std::ofstream &stream )
@@ -327,23 +334,87 @@ public:
     }
 
 
+    // void write( const std::string &filepath )
+    // {
+    //     std::ofstream stream;
+    
+    //     stream = std::ofstream(file_directory(filepath) + ".txt");
+    //     write_header(stream);
+    //     stream.close();
+
+    //     stream = std::ofstream(file_directory(filepath) + ".idkvi", std::ios::binary);
+    //     write_idkvi(stream);
+
+    //     // if (this->animated)
+    //     // {
+    //     //     write_idka(stream);
+    //     // }
+
+    //     stream.close();
+    // }
+
+
     void write( const std::string &filepath )
     {
-        std::ofstream stream;
-    
-        stream = std::ofstream(file_directory(filepath) + ".txt");
-        write_header(stream);
-        stream.close();
+        idk::ModelFileHeader header;
+        header.major        = 1;
+        header.minor        = 1;
+        header.num_meshes   = m_meshes.size();
+        header.vertexformat = idk::ModelVertexFormat_POS_NORM_TAN_UV;
 
-        stream = std::ofstream(file_directory(filepath) + ".idkvi", std::ios::binary);
-        write_idkvi(stream);
+        uint32_t sizeof_vertex = idk::VertexFormat_sizeof(header.vertexformat);
 
-        // if (this->animated)
-        // {
-        //     write_idka(stream);
-        // }
+        std::vector<idk::MeshFileHeader> mesh_headers(header.num_meshes);
+        std::vector<void *> mesh_vertices(header.num_meshes);
+        std::vector<void *> mesh_indices(header.num_meshes);
 
-        stream.close();
+
+        for (uint32_t i=0; i<header.num_meshes; i++)
+        {
+            idk_Mesh &reemesh = m_meshes[i];
+            size_t nbytes;
+        
+            auto &reeverts = reemesh.m_vertices;
+            auto &reeinds  = reemesh.m_indices;
+
+
+            nbytes = reeverts.size() * sizeof_vertex;
+            mesh_vertices[i] = std::malloc(nbytes);
+            std::memcpy(mesh_vertices[i], reeverts.data(), nbytes);
+
+
+            nbytes = reeinds.size() * sizeof(uint32_t);
+            mesh_indices[i] = std::malloc(nbytes);
+            std::memcpy(mesh_indices[i], reeinds.data(), nbytes);
+
+
+            idk::MeshFileHeader &mesh = mesh_headers[i];
+            mesh = idk::MeshFile_new();
+            mesh.num_verts   = reeverts.size();
+            mesh.num_indices = reeinds.size();
+        
+
+            mesh.bounding_radius = idk::MeshFile_computeBoundingSphere<idk::Vertex_P_N_T_UV>(
+                mesh.num_verts,
+                static_cast<idk::Vertex_P_N_T_UV *>(mesh_vertices[i])
+            );
+
+
+            for (int j=0; j<idk::IDK_TEXTURES_PER_MATERIAL; j++)
+            {
+                mesh.textures[j] = reemesh.m_material.paths[j];
+                idk_printvalue(mesh.textures[j]);
+            }
+            mesh.bitmask = idk::MeshFile_packBitmask(mesh);
+
+            idk_printvalue(mesh.bitmask);
+            idk_printvalue(i);
+
+            std::cout << "\n";
+        }
+
+        std::string output_path = fs::path(filepath).replace_extension("idkvi");
+        idk::ModelFile_write(output_path, header, mesh_headers, mesh_vertices, mesh_indices);
     }
 
 };

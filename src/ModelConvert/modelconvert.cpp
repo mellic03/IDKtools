@@ -29,7 +29,7 @@ int main( int argc, char **argv )
 
     // else
     // {
-        Loader<idk::Vertex> loader;
+        Loader<idk::Vertex_P_N_T_UV> loader;
         loader.process(scene);
         loader.write(input_path);
     // }

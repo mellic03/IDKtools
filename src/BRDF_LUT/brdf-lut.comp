@@ -6,10 +6,9 @@ layout (
     local_size_z = 1
 ) in;
 
-layout (binding = 0, rg32f) writeonly uniform image2D un_output;
+layout (binding = 0, rg16f) writeonly uniform image2D un_output;
 
-#define LUT_TEXTUE_SIZE 128
-
+#define LUT_TEXTURE_SIZE 512
 
 
 
@@ -121,8 +120,8 @@ vec2 IntegrateBRDF( float NdotV, float roughness )
 void main()
 {
     ivec2 texel = ivec2(gl_GlobalInvocationID.xy);
-    vec2  uv    = vec2(texel) / LUT_TEXTUE_SIZE;
+    vec2  uv    = vec2(texel) / LUT_TEXTURE_SIZE;
     vec2  brdf  = IntegrateBRDF(uv.x, uv.y);
 
-    imageStore(un_output, texel, vec4(brdf, 0.0, 0.0));
+    imageStore(un_output, texel, vec4(brdf, 0.0, 1.0));
 }

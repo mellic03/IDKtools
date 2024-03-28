@@ -6,6 +6,7 @@
 #include <set>
 
 #include <IDKGameEngine/IDKGameEngine.hpp>
+#include <IDKGraphics/animation/IDKanimation.hpp>
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
