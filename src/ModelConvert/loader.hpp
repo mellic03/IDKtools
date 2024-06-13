@@ -354,7 +354,7 @@ public:
     // }
 
 
-    void write( const std::string &filepath )
+    void write( std::ofstream &stream )
     {
         idk::ModelFileHeader header;
         header.major        = 1;
@@ -367,7 +367,6 @@ public:
         std::vector<idk::MeshFileHeader> mesh_headers(header.num_meshes);
         std::vector<void *> mesh_vertices(header.num_meshes);
         std::vector<void *> mesh_indices(header.num_meshes);
-
 
         for (uint32_t i=0; i<header.num_meshes; i++)
         {
@@ -413,8 +412,19 @@ public:
             std::cout << "\n";
         }
 
-        std::string output_path = fs::path(filepath).replace_extension("idkvi");
-        idk::ModelFile_write(output_path, header, mesh_headers, mesh_vertices, mesh_indices);
+        idk::ModelFile_write(stream, header, mesh_headers, mesh_vertices, mesh_indices);
+    }
+
+
+    void writeSkeleton( std::ofstream &stream )
+    {
+        m_skeleton.write_animations(stream);
+    }
+
+
+    void writeAnimations( std::ofstream &stream )
+    {
+
     }
 
 };

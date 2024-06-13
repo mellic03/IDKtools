@@ -3,6 +3,9 @@
 #include "loader.hpp"
 #include <iomanip>
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 
 int main( int argc, char **argv )
 {
@@ -20,20 +23,26 @@ int main( int argc, char **argv )
     Assimp::Importer importer;
     const aiScene *scene = importer.ReadFile(input_path, flags);
 
-    // if (scene->HasAnimations())
-    // {
-    //     Loader<idk::AnimatedVertex> loader;
-    //     loader.process(scene);
-    //     loader.write(input_path);
-    // }
+    std::string output_path = fs::path(input_path).replace_extension("idkvi");
+    std::ofstream stream(output_path, std::ios::binary);
 
-    // else
-    // {
+    if (scene->HasAnimations())
+    {
+        Loader<idk::Vertex_P_N_T_UV_SKINNED> loader;
+        loader.process(scene);
+        loader.write(stream);
+        loader.writeSkeleton(stream);
+        loader.writeAnimations(stream);
+    }
+
+    else
+    {
         Loader<idk::Vertex_P_N_T_UV> loader;
         loader.process(scene);
-        loader.write(input_path);
-    // }
+        loader.write(stream);
+    }
 
+    stream.close();
 
     return 0;
 }
