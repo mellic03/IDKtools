@@ -399,7 +399,7 @@ public:
             );
 
 
-            for (int j=0; j<idk::IDK_TEXTURES_PER_MATERIAL; j++)
+            for (int j=0; j<idk::draw_buffer::TEXTURES_PER_MATERIAL; j++)
             {
                 mesh.textures[j] = reemesh.m_material.paths[j];
                 idk_printvalue(mesh.textures[j]);

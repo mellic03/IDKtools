@@ -73,7 +73,6 @@ target_link_libraries(
     ${GRAPHICS_LIBRARIES}
 
     IDKGraphics
-    IDKGameEngine
 
     ${CMAKE_CURRENT_SOURCE_DIR}/external/lib/libassimp.so
 )
@@ -122,7 +121,6 @@ target_link_libraries(
     ${GRAPHICS_LIBRARIES}
     libidk
     IDKGraphics
-    IDKGameEngine
 )
 # ----------------------------------------------------------------------------------------------
 
