@@ -1,4 +1,5 @@
-#include "IDKGameEngine/IDKGameEngine.hpp"
+#include <IDKGraphics/IDKGraphics.hpp>
+#include <libidk/idk_gl_headless.hpp>
 
 void renderCube();
 
@@ -12,9 +13,7 @@ int main( int argc, char **argv )
     const size_t      output_w   = std::atol(argv[1]); // 32
     const std::string output_dir = std::string(argv[2]);
 
-    idk::RenderEngine ren;
-    ren.init("Diffuse IBL", 64, 64, idk::RenderEngine::INIT_HEADLESS);
-    ren.createProgram("diffuseIBL", "./shaders/", "diffuseIBL.vs", "diffuseIBL.fs");
+    idk::initHeadlessGLContext(4, 6);
 
     // Load input cubemap
     // -----------------------------------------------------------------------------------------
@@ -24,7 +23,7 @@ int main( int argc, char **argv )
         .minfilter      = GL_LINEAR,
         .magfilter      = GL_LINEAR,
         .datatype       = GL_UNSIGNED_BYTE,
-        .genmipmap      = true
+        .genmipmap      = GL_FALSE
     };
 
     GLuint env_map = idk::gltools::loadCubemap("./input/", faces, cubeconfig);
@@ -45,19 +44,23 @@ int main( int argc, char **argv )
     };
 
 
-    idk::glShader &program = ren.getProgram("diffuseIBL");
 
     idk::glFramebuffer framebuffer;
     idk::glTextureConfig config = {
-        .internalformat = GL_SRGB8_ALPHA8,
+        .internalformat = GL_RGBA16F,
+        .format         = GL_RGBA,
         .minfilter      = GL_LINEAR,
-        .magfilter      = GL_LINEAR
+        .magfilter      = GL_LINEAR,
+        .datatype       = GL_FLOAT
     };
 
     framebuffer.reset(output_w, output_w, 1);
     framebuffer.cubemapColorAttachment(config);
     framebuffer.bind();
 
+
+    idk::glShaderProgram program;
+    program.loadFileC("./shaders/", "diffuseIBL.vs", "diffuseIBL.fs");
     program.bind();
     program.set_samplerCube("un_env_map", env_map);
     program.set_mat4("un_projection", captureProjection);
@@ -82,7 +85,6 @@ int main( int argc, char **argv )
     }
 
     framebuffer.unbind();
-    idk::glShader::unbind();
     // -----------------------------------------------------------------------------------------
 
 

@@ -1,4 +1,5 @@
-#include "IDKGameEngine/IDKGameEngine.hpp"
+#include <IDKGraphics/IDKGraphics.hpp>
+#include <libidk/idk_gl_headless.hpp>
 
 void renderCube();
 void saveCubemap( std::string filepath, size_t w, GLint level, GLuint cubemap );
@@ -14,9 +15,7 @@ int main( int argc, char **argv )
     const size_t      output_w   = std::atol(argv[2]); // 128
     const std::string output_dir = std::string(argv[3]);
 
-    idk::RenderEngine ren;
-    ren.init("Specular IBL", 64, 64, idk::RenderEngine::INIT_HEADLESS);
-    ren.createProgram("specularIBL", "./shaders/", "specularIBL.vs", "specularIBL.fs");
+    idk::initHeadlessGLContext(4, 6);
 
 
     // Load input cubemap
@@ -27,7 +26,7 @@ int main( int argc, char **argv )
         .minfilter      = GL_LINEAR,
         .magfilter      = GL_LINEAR,
         .datatype       = GL_UNSIGNED_BYTE,
-        .genmipmap      = true
+        .genmipmap      = GL_TRUE
     };
     
     GLuint env_map = idk::gltools::loadCubemap("./input/", faces, cubeconfig);
@@ -48,17 +47,23 @@ int main( int argc, char **argv )
     };
 
 
-    idk::glShader &program = ren.getProgram("specularIBL");
-
     idk::glFramebuffer framebuffer;
     idk::glTextureConfig config = {
-        .internalformat = GL_SRGB8_ALPHA8,
+        .internalformat = GL_RGBA16F,
+        .format         = GL_RGBA,
         .minfilter      = GL_LINEAR_MIPMAP_LINEAR,
-        .magfilter      = GL_LINEAR
+        .magfilter      = GL_LINEAR,
+        .datatype       = GL_FLOAT
     };
 
     uint maxMipLevels = 5;
     uint mipWidth = output_w;
+
+
+    idk::glShaderProgram program;
+    program.loadFileC("./shaders/", "specularIBL.vs", "specularIBL.fs");
+    program.bind();
+
 
     for (uint mip=0; mip<=maxMipLevels; mip++)
     {
@@ -66,7 +71,6 @@ int main( int argc, char **argv )
         framebuffer.cubemapColorAttachment(config);
         framebuffer.bind();
 
-        program.bind();
         program.set_samplerCube("un_env_map", env_map);
         program.set_mat4("un_projection", captureProjection);
         program.set_float("un_resolution", (float)input_w);
@@ -100,7 +104,6 @@ int main( int argc, char **argv )
 
 
     framebuffer.unbind();
-    idk::glShader::unbind();
     // -----------------------------------------------------------------------------------------
 
 

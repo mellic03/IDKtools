@@ -37,7 +37,7 @@ set(GRAPHICS_LIBRARIES
 # target_link_libraries(
 #     ${PROJECT_NAME} PUBLIC
 #     ${GRAPHICS_LIBRARIES}
-#     IDKGameEngine
+#     IDKGraphics
 # )
 
 
@@ -50,7 +50,7 @@ set(GRAPHICS_LIBRARIES
 # target_link_libraries(
 #     ${PROJECT_NAME} PUBLIC
 #     ${GRAPHICS_LIBRARIES}
-#     IDKGameEngine
+#     IDKGraphics
 # )
 # ----------------------------------------------------------------------------------------------
 
